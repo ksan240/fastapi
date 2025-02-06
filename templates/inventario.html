@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Inventario{% endblock %}
+
+{% block content %}
+<h2>Selecciona tu Inventario</h2>
+
+<form method="post" action="/resumen" id="purchase-form">
+    <div>
+        <label for="weapon">Selecciona un arma:</label>
+        <select id="weapon" name="weapon" onchange="updateSkins()">
+            <option value="">-- Selecciona un arma --</option>
+            <option value="ak47">AK-47</option>
+            <option value="awp">AWP</option>
+            <option value="glock-usp">Glock/USP</option>
+            <option value="m4a1">M4A1</option>
+            <option value="deagle">Desert Eagle</option>
+        </select>
+    </div>
+
+    <div id="skin-container" style="margin-top: 20px;">
+        <label for="skin">Selecciona una skin:</label>
+        <select id="skin" name="skin" onchange="updateSkinDetails()">
+            <option value="">-- Selecciona una skin --</option>
+        </select>
+    </div>
+
+    <div id="skin-details" class="img-centradas" style="margin-top: 20px; display: none;">
+        <h3>Detalles de la Skin</h3>
+        <p id="skin-name"></p>
+        <img id="skin-image" src="" alt="Skin Image">
+        <p id="skin-price"></p>
+    </div>
+
+    <button type="button" id="buy-button" style="margin-top: 20px;" onclick="addToCart()">Comprar</button>
+    <button type="button" id="clear-cart" style="margin-top: 20px; margin-left: 10px;" onclick="clearCart()">Borrar Todo</button>
+</form>
+
+<h3>Resumen de tu Compra</h3>
+<div id="purchase-summary" style="display: none; font-size: small;">
+    <ul id="purchase-list"></ul>
+    <p id="total-price">Total: $0</p>
+</div>
+
+<script>
+    // Base de datos de armas y skins
+    const weapons = {
+        ak47: [
+            { name: "Vulcan", price: 700, image: "static/IMG/AK/vulcan.png" },
+            { name: "Fire Serpent", price: 2060, image : "static/IMG/AK/fireserpent.png" },
+            { name: "Hydroponic", price: 1700, image: "static/IMG/AK/hydroponic.png" },
+            { name: "Wild Lotus", price: 13000, image: "static/IMG/AK/wildlotus.png" },
+            { name: "Inheritance", price: 120, image: "static/IMG/AK/inheritance.png" },
+        ],
+        awp: [
+            { name: "Dragon Lore", price: 20000, image: "static/IMG/AWP/dragonlore.png" },
+            { name: "Asiimov", price: 300, image: "static/IMG/AWP/asiimov.png" },
+            { name: "Fade", price: 2200, image: "static/IMG/AWP/fade.png" },
+            { name: "Desert Hydra", price: 2000, image: "static/IMG/AWP/deserthydra.png" },
+            { name: "Gugnir", price: 16000, image: "static/IMG/AWP/gugnir.png" },
+        ],
+        glockusp: [
+            { name: "Fade", price: 2400, image: "static/IMG/glockusp/fade.png" },
+            { name: "Twilight Galaxy", price: 140, image: "static/IMG/glockusp/twilightgalaxy.png" },
+            { name: "Gamma Doppler", price: 500, image: "static/IMG/glockusp/gammadoppler.png" },
+            { name: "Printstream", price: 30, image: "static/IMG/glockusp/printstream.png" },
+            { name: "Target Acquired", price: 130, image: "static/IMG/glockusp/targetacquired.png" },
+        ],
+        m4a1: [
+            { name: "Hot Rod", price: 1000, image: "static/IMG/m4a1/hotrod.png" },
+            { name: "Blue Phosphor", price: 600, image: "static/IMG/m4a1/bluephosphor.png" },
+            { name: "Printstream", price: 180, image: "static/IMG/m4a1/printstream.png" },
+            { name: "Fade", price: 600, image: "static/IMG/m4a1/fade.png" },
+            { name: "Black Lotus", price: 20, image: "static/IMG/m4a1/blacklotus.png" },
+        ],
+        deagle: [
+            { name: "Blaze", price: 500, image: "static/IMG/deagle/blaze.png" },
+            { name: "Jormungandr", price: 300, image: "static/IMG/deagle/jormungandr.png" },
+            { name: "Golden Koi", price: 100, image: "static/IMG/deagle/goldenkoi.png" },
+            { name: "Coblato DDPAT", price: 70, image: "static/IMG/deagle/ddpatcobalto.png" },
+            { name: "Fenec Fox", price: 110, image: "static/IMG/deagle/fenecfox.png" },
+        ],
+    };
+
+    let cart = [];
+
+    // Actualiza las skins disponibles según el arma seleccionada
+    function updateSkins() {
+        const weapon = document.getElementById("weapon").value;
+        const skinSelect = document.getElementById("skin");
+        const skinDetails = document.getElementById("skin-details");
+        skinDetails.style.display = "none";
+        skinSelect.innerHTML = '<option value="">-- Selecciona una skin --</option>';
+
+        if (weapons[weapon]) {
+            weapons[weapon].forEach((skin) => {
+                const option = document.createElement("option");
+                option.value = skin.name;
+                option.textContent = `${skin.name} (${skin.price}$)`;
+                skinSelect.appendChild(option);
+            });
+        }
+    }
+
+    // Muestra los detalles de la skin seleccionada
+    function updateSkinDetails() {
+        const weapon = document.getElementById("weapon").value;
+        const skinName = document.getElementById("skin").value;
+        const skinDetails = document.getElementById("skin-details");
+
+        if (weapons[weapon]) {
+            const selectedSkin = weapons[weapon].find((skin) => skin.name === skinName);
+            if (selectedSkin) {
+                document.getElementById("skin-name").textContent = `Nombre: ${selectedSkin.name}`;
+                document.getElementById("skin-image").src = selectedSkin.image;
+                document.getElementById("skin-price").textContent = `Precio: ${selectedSkin.price}$`;
+                skinDetails.style.display = "block";
+            }
+        }
+    }
+
+    // Añadir arma y skin al carrito
+    function addToCart() {
+        const weapon = document.getElementById("weapon").value;
+        const skinName = document.getElementById("skin").value;
+
+        if (weapon && skinName) {
+            const skin = weapons[weapon].find(skin => skin.name === skinName);
+            if (skin) {
+                cart.push({
+                    weapon: weapon,
+                    skin: skin.name,
+                    price: skin.price,
+                });
+                updateCartSummary();
+            }
+        }
+    }
+
+    // Actualiza el resumen del carrito
+    function updateCartSummary() {
+        const purchaseSummary = document.getElementById("purchase-summary");
+        const purchaseList = document.getElementById("purchase-list");
+        const totalPrice = document.getElementById("total-price");
+        let total = 0;
+
+        // Limpiar lista de compra actual
+        purchaseList.innerHTML = '';
+
+        cart.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = `${item.weapon} - ${item.skin} ($${item.price})`;
+            purchaseList.appendChild(li);
+            total += item.price;
+        });
+
+        totalPrice.textContent = `Total: $${total}`;
+        purchaseSummary.style.display = "block";
+    }
+</script>
+{% endblock %}

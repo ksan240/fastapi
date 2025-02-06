@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>{% block title %}CS2 Web{% endblock %}</title>
+    
+</head>
+<body>
+    <nav>
+        <a href="/">Inicio</a> | 
+        <a href="/inventario">Inventario</a> | 
+        <a href="/stats">Estadísticas</a> | 
+        <a href="/resumen">Abrir Cajas</a>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

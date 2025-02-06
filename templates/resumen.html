@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Resumen - Tirada de Cajas{% endblock %}
+
+{% block content %}
+<h2>Tirada de Cajas de CS2</h2>
+
+<div id="case-container">
+    <button id="open-case">Abrir Caja</button>
+    <div id="case-animation">
+        <!-- Aquí iría la animación de apertura de la caja -->
+        <div id="case-lid" class="case-part"></div>
+        <div id="case-body" class="case-part"></div>
+        <div id="case-item" class="case-part" style="display: none;">
+            <img id="item-image" src="" alt="Arma Aleatoria">
+            <p id="item-name"></p>
+            <p id="item-condition"></p>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', path='js/case_opening.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', path='css/case_opening.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Estadísticas{% endblock %}
+
+{% block content %}
+<h2>Cálculo de tu rango en Faceit</h2>
+<form method="post" action="/stats">
+    <label for="faceit_elo">Ingresa tu ELO de Faceit:</label>
+    <input type="number" id="faceit_elo" name="faceit_elo" required>
+    <br>
+    <button type="submit">Calcular Rango</button>
+</form>
+
+{% if rango %}
+    <h3>Tu Rango</h3>
+    <p>Con un ELO de <strong>{{ elo }}</strong>, tu rango es: <strong>{{ rango }}</strong>.</p>
+{% endif %}
+
+<h2>Operaciones CRUD para Armas</h2>
+
+<h3>Crear Arma</h3>
+<form method="post" action="/armas/create">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+    <br>
+    <label for="skin">Skin:</label>
+    <input type="text" id="skin" name="skin" required>
+    <br>
+    <label for="precio">Precio:</label>
+    <input type="number" id="precio" name="precio" step="0.01" required>
+    <br>
+    <label for="float">Float:</label>
+    <input type="number" id="float_skin" name="float_skin" step="0.01" required>
+    <br>
+    <label for="stattrack">Stattrack:</label>
+    <input type="checkbox" id="stattrack" name="stattrack">
+    <br>
+    <button type="submit">Crear Arma</button>
+</form>
+
+<h3>Lista de Armas</h3>  <table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Skin</th>
+            <th>Precio</th>
+            <th>Float</th>
+            <th>Stattrack</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for arma in armas %}
+        <tr>
+            <td>{{ arma.id }}</td>
+            <td>{{ arma.nombre }}</td>
+            <td>{{ arma.skin }}</td>
+            <td>{{ arma.precio }}</td>
+            <td>{{ arma.float_skin }}</td>
+            <td>{{ arma.stattrack }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Actualizar Arma</h3>
+<form method="post" action="/armas/update">
+    <label for="id">ID de la Arma:</label>
+    <input type="number" id="id" name="id" required>
+    <br>
+    <label for="new_nombre">Nuevo Nombre:</label>
+    <input type="text" id="new_nombre" name="new_nombre" required>
+    <br>
+    <button type="submit">Actualizar Arma</button>
+</form>
+
+<h3>Borrar Arma</h3>
+<form method="post" action="/armas/delete">
+    <label for="id">ID de la Arma a Borrar:</label>
+    <input type="number" id="id" name="id" required>
+    <br>
+    <button type="submit">Borrar Arma</button>
+</form>
+{% endblock %}

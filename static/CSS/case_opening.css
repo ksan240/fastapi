@@ -1,0 +1,61 @@
+/* Estilo para el contenedor de la caja */
+#case-container {
+    width: 300px;
+    margin: 0 auto 20px; /* Añadimos margen inferior para separar del contenido que sigue */
+    position: relative;
+    text-align: center; /* Centramos el contenido del contenedor */
+}
+
+/* Estilo para el botón de abrir caja */
+#open-case {
+    background-color: gold;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto 20px; /* Añadimos margen inferior para separar del contenido que sigue */
+    z-index: 1000; /* Aumentamos el z-index para asegurar que esté por encima */
+    position: relative; /* Necesario para que z-index funcione */
+}
+
+/* Ajustamos la posición de la animación de la caja para que esté debajo del botón */
+#case-animation {
+    position: relative;
+    z-index: 1; /* Menor que el z-index del botón */
+    width: 100%; /* Aseguramos que ocupe todo el ancho del contenedor */
+    height: 200px; /* Ajusta según el tamaño deseado de tu caja */
+}
+
+.case-part {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #333;
+    transition: all 1s ease;
+}
+
+#case-lid {
+    top: -20px;
+    transform-origin: top center;
+}
+
+#case-body {
+    top: 0;
+}
+
+#case-item {
+    top: 0;
+    display: none;
+}
+
+.case-part.open {
+    transform: rotateX(90deg);
+}
+
+#item-image {
+    max-width: 100%;
+    max-height: 100%;
+}
