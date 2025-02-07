@@ -7,14 +7,14 @@ from data.dao.dao_armas import DaoArmas
 from data import database 
 from fastapi.responses import RedirectResponse
 
-# Crear la aplicación FastAPI
+
 app = FastAPI()
 
-# Montar directorios para archivos estáticos y plantillas
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-# Inventario inicial con armas disponibles
+
 inventory = {
     "AK-47": None,
     "AWP": None,
@@ -61,7 +61,7 @@ dao_armas = DaoArmas()
 
 @app.get("/stats", response_class=HTMLResponse)
 async def stats(request: Request):
-    armas = dao_armas.get_all(database.connection())  # Obtener armas de la BD
+    armas = dao_armas.get_all(database.connection())
     return templates.TemplateResponse("stats.html", {"request": request, "armas": armas})
 
 
@@ -91,16 +91,16 @@ async def calculate_rank(request: Request, faceit_elo: int = Form(...)):
     return templates.TemplateResponse("stats.html", {"request": request, "rango": rango, "elo": faceit_elo})
 
 @app.post("/armas/create")
-async def create_arma(request: Request, nombre: str = Form(...), skin: str = Form(...), precio: str = Form(...), float_skin: str = Form(...), stattrack: bool = Form(False)):  # Obtén stattrack del formulario
-    dao_armas.insert(database.connection(), nombre, skin, precio, float_skin, stattrack)  # Pasa la conexión y stattrack
-    return RedirectResponse(url="/stats", status_code=303)  # Redirige a /stats
+async def create_arma(request: Request, nombre: str = Form(...), skin: str = Form(...), precio: str = Form(...), float_skin: str = Form(...), stattrack: bool = Form(False)):
+    dao_armas.insert(database.connection(), nombre, skin, precio, float_skin, stattrack) 
+    return RedirectResponse(url="/stats", status_code=303)
 
 @app.post("/armas/update")
 async def update_arma(request: Request, id: int = Form(...), new_nombre: str = Form(...)):
-    dao_armas.update(database.connection(), id, new_nombre)  # Pasa la conexión
-    return RedirectResponse(url="/stats", status_code=303)  # Redirige a /stats
+    dao_armas.update(database.connection(), id, new_nombre)
+    return RedirectResponse(url="/stats", status_code=303)
 
 @app.post("/armas/delete")
 async def delete_arma(request: Request, id: int = Form(...)):
-    dao_armas.delete(database.connection(), id)  # Pasa la conexión
-    return RedirectResponse(url="/stats", status_code=303)  # Redirige a /stats
+    dao_armas.delete(database.connection(), id)
+    return RedirectResponse(url="/stats", status_code=303)

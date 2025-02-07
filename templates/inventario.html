@@ -43,7 +43,7 @@
 </div>
 
 <script>
-    // Base de datos de armas y skins
+
     const weapons = {
         ak47: [
             { name: "Vulcan", price: 700, image: "static/IMG/AK/vulcan.png" },
@@ -84,7 +84,7 @@
 
     let cart = [];
 
-    // Actualiza las skins disponibles según el arma seleccionada
+
     function updateSkins() {
         const weapon = document.getElementById("weapon").value;
         const skinSelect = document.getElementById("skin");
@@ -102,7 +102,7 @@
         }
     }
 
-    // Muestra los detalles de la skin seleccionada
+
     function updateSkinDetails() {
         const weapon = document.getElementById("weapon").value;
         const skinName = document.getElementById("skin").value;
@@ -119,7 +119,7 @@
         }
     }
 
-    // Añadir arma y skin al carrito
+
     function addToCart() {
         const weapon = document.getElementById("weapon").value;
         const skinName = document.getElementById("skin").value;
@@ -137,14 +137,14 @@
         }
     }
 
-    // Actualiza el resumen del carrito
+  
     function updateCartSummary() {
         const purchaseSummary = document.getElementById("purchase-summary");
         const purchaseList = document.getElementById("purchase-list");
         const totalPrice = document.getElementById("total-price");
         let total = 0;
 
-        // Limpiar lista de compra actual
+       
         purchaseList.innerHTML = '';
 
         cart.forEach(item => {
